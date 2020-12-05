@@ -1,0 +1,6 @@
+.favImage {
+    width: 450px;
+    height: 300px;
+    opacity: 0.8;
+    transform: translate(100px, 100px);
+}

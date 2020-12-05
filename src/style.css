@@ -1,0 +1,6 @@
+.buttonContainer div:nth-of-type(odd) {
+    /*
+    选中奇数个div元素
+   */
+    background: #666;
+}

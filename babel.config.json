@@ -1,0 +1,25 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "target": {
+          "chrome": "67",
+          "firefox": "83",
+          "useBuildIns": "usage"
+        }
+      }
+    ]
+  ],
+  "plugins": [
+    [
+      "@babel/plugin-transform-runtime", {
+      "absoluteRuntime": false,
+      "corejs": 2,
+      "helpers": true,
+      "regenerator": true,
+      "useESModules": false
+    }
+    ]
+  ]
+}
