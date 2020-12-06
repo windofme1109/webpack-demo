@@ -145,7 +145,7 @@
     ```
 
 12. 我们希望对于 numbers 模块的修改，不会影响counter。如下图所示：
-    ![](./images/HMR-4.png)
+    ![](./images/HMR-4.png)  
     counter 模块控制的 7，不会因为更改了 number 模块而导致的页面刷新回到初始状态。
 
 13. 我们需要在 index.js 中添加如下代码：
