@@ -56,7 +56,7 @@
       }
    ```
 4. 给奇数个 item 设置背景颜色。如下图所示：
-   ![](./images/HMR-1.png)
+   ![](../images/HMR-1.png)
 
 5. 如果我想改变背景颜色，比如：
    ```css
@@ -69,9 +69,9 @@
    ```
 
 6. 由于我启用了 webpack-dev-server，那么会监测文件变化，自动打包，刷新浏览器。我们看到的是这样：
-   ![](./images/HMR-2.png)
+   ![](../images/HMR-2.png)
    页面被刷新，我们必须点击按钮，才会出现更改后的效果：
-   ![](./images/HMR-3.png)
+   ![](../images/HMR-3.png)
 
 7. 我们想在不刷新页面的情况下，就看到效果，怎么办呢？
 答案是：对 webpack-dev-server 进行配置。配置如下：
@@ -161,7 +161,7 @@
     ```
 
 3. 我们希望对于 numbers 模块的修改，不会影响counter。如下图所示：
-    ![](./images/HMR-4.png)  
+    ![](../images/HMR-4.png)  
     counter 模块控制的 7，不会因为更改了 number 模块而导致的页面刷新回到初始状态。
 
 4. 我们需要在 index.js 中添加如下代码：
