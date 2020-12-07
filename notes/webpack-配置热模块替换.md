@@ -1,11 +1,26 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [热模块替换（Hot Module Replacement，HMR）](#%E7%83%AD%E6%A8%A1%E5%9D%97%E6%9B%BF%E6%8D%A2hot-module-replacementhmr)
+  - [1. 概念](#1-%E6%A6%82%E5%BF%B5)
+  - [2. 使用 - CSS](#2-%E4%BD%BF%E7%94%A8---css)
+  - [3. 使用 - JavaScript](#3-%E4%BD%BF%E7%94%A8---javascript)
+  - [4. 总结](#4-%E6%80%BB%E7%BB%93)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 热模块替换（Hot Module Replacement，HMR）
 
 
 ## 1. 概念
+
 1. 热模块替换（Hot Module Replacement，HMR），指的是在不影响其他模块功能的情况下（或者在运行的时候），更新其他模块的功能。两者之间不会相互影响。
 
-## 2.。 使用
+## 2. 使用 - CSS
+
 1. 举个例子：
+
    ```javascript
       index.js
       var contentHTML = `
@@ -100,9 +115,10 @@
     ],`  
 这样就实现CSS样式的HMR。
 
-9. 那么对于 js 文件，如何实现 HMR 呢？
 
-10. 新建两个 js 文件，counter.js 和 number.js，代码如下：
+## 3. 使用 - JavaScript
+
+1. 新建两个 js 文件，counter.js 和 number.js，代码如下：
     ```javascript
        counter.js
        export default function counter() {
@@ -134,7 +150,7 @@
        }
     ```
     在页面中插入一个数字。
-11. 在 index.js 中引入，并执行：
+2. 在 index.js 中引入，并执行：
     ```javascript
        index.js
        import counter from './counter'
@@ -144,11 +160,11 @@
        number() ;
     ```
 
-12. 我们希望对于 numbers 模块的修改，不会影响counter。如下图所示：
+3. 我们希望对于 numbers 模块的修改，不会影响counter。如下图所示：
     ![](./images/HMR-4.png)  
     counter 模块控制的 7，不会因为更改了 number 模块而导致的页面刷新回到初始状态。
 
-13. 我们需要在 index.js 中添加如下代码：
+4. 我们需要在 index.js 中添加如下代码：
     ```javascript
        // 启用了HMR
        if (module.hot) {
@@ -160,3 +176,30 @@
        }
     ```
     首先检测是否启用 HMR。然后调用 accept() 函数，监视 numbers 模块的变化。一旦 numbers 模块发生变化，就调用回调函数。这样就是实现了 js 文件的 HMR。
+
+## 4. 总结
+
+1. 启用 HMR
+   - 在 `devServer` 中，配置 `hot` 和 `hotOnly` 这两个字段。
+   - 配置 `HotModuleReplacementPlugin` 插件
+     ```javascript
+        const webpack = require('webpack');
+        module.exports = {
+            plugins: [
+                new webpack.HotModuleReplacementPlugin()
+            ], 
+        }
+        
+     ```
+2. 通过配置启用 HMR 以后，对 CSS 文件是默认生效的。因为在 `css-loader` 已经替我们做过配置了。
+
+3. 对于 js 文件，需要我们手动去监听 js 文件：
+   ```javascript
+      if (module.hot) {
+          // 第一个参数是依赖项，也就是要监视哪个文件
+          // 第二个参数是回调函数，表示监视的文件一旦发生变化，就执行回调函数
+          module.hot.accept('./numbers', () => {
+               number() ;
+          })
+      }
+   ``` 
