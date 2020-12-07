@@ -1,6 +1,20 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Webpack 配置 loader](#webpack-%E9%85%8D%E7%BD%AE-loader)
+  - [1. 什么是 loader？](#1-%E4%BB%80%E4%B9%88%E6%98%AF-loader)
+  - [2. file-loader](#2-file-loader)
+  - [3. url-loader](#3-url-loader)
+  - [4. 打包 css 文件](#4-%E6%89%93%E5%8C%85-css-%E6%96%87%E4%BB%B6)
+  - [5. css 模块化](#5-css-%E6%A8%A1%E5%9D%97%E5%8C%96)
+  - [6. Webpack 打包字体文件](#6-webpack-%E6%89%93%E5%8C%85%E5%AD%97%E4%BD%93%E6%96%87%E4%BB%B6)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Webpack 配置 loader
 
-## 1. 什么是loader？
+## 1. 什么是 loader？
 
 1. 在一般情况下，webpack 只识别 js 文件，只对 js 文件进行打包。对于图片、样式文件等非 js 文件就无能为力了。所以需要 loader 的帮忙。
 
@@ -32,6 +46,7 @@
    - `Rule.use` 值为数组，这样可以配置多个 loader。数组的元素是对象，对象用来设置使用什么 loader，以及对 loader 的各种配置。当只有一个 loader 时，可以不使用数组，而使用一个对象。
    - `Rule.use.loader` 指定 loader
    - `Rule.use.options` loader 的具体配置，这个配置和具体的 loader 有关，需要我们查询具体 loader 的文档。
+   
 ## 2. file-loader
 
 1. file-loader 用来对非 js 文件进行打包。根据 test 属性，使用正则表达式，检测文件的类型。从而进行打包处理。
@@ -89,7 +104,8 @@
    
 6. url-loader 说明：[url-loader](https://v4.webpack.js.org/loaders/url-loader/#getting-started)
 
-### 4. 打包css文件
+## 4. 打包 css 文件
+
 1. 打包 css 文件要使用两个 loader：style-loader、css-loader。
 
 2. css-loader 的作用是分析css文件之间的相互依赖关系，最终经这些css内容合并到一起。
@@ -138,7 +154,7 @@
           }]
        ```
 
-## 5. css模块化
+## 5. css 模块化
 
 1. 有一些情况下，我们希望某个模块引入的css文件只对当前的模块中的元素起作用。所以需要css模块化。
 
@@ -221,6 +237,7 @@
      ```
 
 ## 6. Webpack 打包字体文件
+
 1. 下载一个 icon font，解压以后，我们需要的是四个文件：`.eot`、`.svg`、`.ttf`、`.woff`。将这个四个文件放到项目中的一个文件夹中。如font。其中还有一个 iconfont.css 文件，内容如下：
    ```css
       @font-face {font-family: "iconfont";
@@ -264,6 +281,6 @@
       }
    ```
 
-5. 这样就可以打包svg、ttf这样的文件。实际上，对于这类文件的打包，就是将svg、ttf等文件打包到输出文件夹内，同时获得这个资源的引用路径。
+5. 这样就可以打包 svg、ttf 这样的文件。实际上，对于这类文件的打包，就是将 svg、ttf 等文件打包到输出文件夹内，同时获得这个资源的引用路径。
 
 6. 经过上面的一系列操作，我们就能在页面中引入这个字体图标了。

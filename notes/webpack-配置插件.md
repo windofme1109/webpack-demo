@@ -1,10 +1,22 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Webpack 配置插件](#webpack-%E9%85%8D%E7%BD%AE%E6%8F%92%E4%BB%B6)
+  - [1. 基本概念](#1-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5)
+  - [2. 插件介绍](#2-%E6%8F%92%E4%BB%B6%E4%BB%8B%E7%BB%8D)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Webpack 配置插件
 
 ## 1. 基本概念
 
 1. 插件就是用来扩展Webpack功能的一些第三方模块。在Webpack运行到某个时刻，插件帮助我们做一些事。
 
-2. 插件的使用方法可以参考插件的文档。
+2. 插件的使用方法可以参考插件的文档：[Plugins](https://v4.webpack.js.org/configuration/plugins/)
+
+3. webpack 推荐的插件：[webpack-plugins](https://v4.webpack.js.org/plugins/)
 
 ## 2. 插件介绍
 
