@@ -5,11 +5,12 @@
       {
         "target": {
           "chrome": "67",
-          "firefox": "83",
-          "useBuildIns": "usage"
-        }
+          "firefox": "83"
+        },
+        "useBuildIns": "usage"
       }
-    ]
+    ],
+    ["@babel/preset-react"]
   ],
   "plugins": [
     [
