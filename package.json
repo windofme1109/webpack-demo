@@ -2,9 +2,11 @@
   "name": "webpack-demo",
   "version": "1.0.0",
   "description": "",
+  "sideEffects": false,
   "private": true,
   "scripts": {
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "bundle": "webpack"
   },
   "keywords": [],
   "author": "Qin",

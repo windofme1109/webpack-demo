@@ -155,6 +155,10 @@ module.exports = {
         new webpack.HotModuleReplacementPlugin()
     ],
 
+    optimization: {
+        // 仅仅打包那些被使用的导出的内容，默认为 false
+        usedExports: true
+    },
     // 打包完成后的文件的配置
     output: {
 

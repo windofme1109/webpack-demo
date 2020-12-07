@@ -4,25 +4,29 @@
 
 // import createImg from './create_img'
 
-import '@babel/polyfill' ;
-import React, {Component} from 'react' ;
-import ReactDOM from 'react-dom' ;
+// import '@babel/polyfill' ;
+// import React, {Component} from 'react' ;
+// import ReactDOM from 'react-dom' ;
 
 
-class App extends Component {
+import {add} from './math';
 
-    render() {
+add(1, 3);
 
-        return (
-
-            <div>
-                <h1>Hello World</h1>
-            </div>
-        )
-    }
-}
-
-ReactDOM.render(<App />, document.querySelector('.root')) ;
+// class App extends Component {
+//
+//     render() {
+//
+//         return (
+//
+//             <div>
+//                 <h1>Hello World</h1>
+//             </div>
+//         )
+//     }
+// }
+//
+// ReactDOM.render(<App />, document.querySelector('.root')) ;
 
 // let arr = [
 //     new Promise(() => {}),
