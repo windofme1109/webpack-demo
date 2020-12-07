@@ -14,7 +14,7 @@
 
 ## 1. source-map 概念
 
-1. source-map用来建立源文件同打包后的文件的对应代码的映射关系。
+1. source-map 用来建立源文件同打包后的文件的对应代码的映射关系。
 
 2. 参考文档：[Devtool](https://v4.webpack.js.org/configuration/devtool/#devtool)
 
