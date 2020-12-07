@@ -1,13 +1,27 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Babel 转换 ES6](#babel-%E8%BD%AC%E6%8D%A2-es6)
+  - [1. 基本说明](#1-%E5%9F%BA%E6%9C%AC%E8%AF%B4%E6%98%8E)
+  - [2. 安装](#2-%E5%AE%89%E8%A3%85)
+  - [3. 配置](#3-%E9%85%8D%E7%BD%AE)
+  - [4. `babel-loader` 配置项](#4-babel-loader-%E9%85%8D%E7%BD%AE%E9%A1%B9)
+  - [5. preset](#5-preset)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Babel 转换 ES6
 
-1. 如果想使用 ES6 语法，为了保证浏览器能够顺利执行，最好使用 Babel 进行编译，将其转换为 ES5。这样浏览器能够完全识别并运行。
+## 1. 基本说明
+- 如果想使用 ES6 语法，为了保证浏览器能够顺利执行，最好使用 Babel 进行编译，将其转换为 ES5。这样浏览器能够完全识别并运行。
 
-2. 安装
-   - `npm install --save-dev babel-loader @babel/core`
+## 2. 安装
+- `npm install --save-dev babel-loader @babel/core`
 
-3. 配置
-   - 在 webpack.config.js 中进行如下配置：
-     ```javascript
+## 3. 配置
+- 在 webpack.config.js 中进行如下配置：
+  ```javascript
         webpack.config.js
         module.exports = {
         	module: {
@@ -32,18 +46,21 @@
           },
         
         }
-     ```
+  ```
 
-4. 配置项
-   - `exclude` 表示不予要编译哪些文件夹中的js文件。
+## 4. `babel-loader` 配置项
+- `exclude` 表示不予要编译哪些文件夹中的js文件。
 
-5. babel-loader 只是用来打包 js 文件，打通 webpack 和babel之间的关系。但并不对 ES6 代码进行编译。实际起作用的是 `@babel/preset-env` 这个插件，只有使用了这个插件，才能将 ES6 语法转换为 ES5 语法。所以还要安装这个插件：
+## 5. preset
+
+1. babel-loader 只是用来打包 js 文件，打通 webpack 和babel之间的关系。但并不对 ES6 代码进行编译。实际起作用的是 `@babel/preset-env` 这个插件，只有使用了这个插件，才能将 ES6 语法转换为 ES5 语法。所以还要安装这个插件：  
 `npm install @babel/preset-env --save-dev`
-6. 在 `options` 中，添加 `presets` 属性，将`@babel/preset-env` 这个插件添加进去。如上面所示。这样才能实现在 Webpack 中转换 ES6 语法。
 
-7. 上面的配置，使得 ES6 的语法转换为 ES5，但是对于新增的 Promise、map 等新的特性，却没有进行转换。
+2. 在 `options` 中，添加 `presets` 属性，将`@babel/preset-env` 这个插件添加进去。如上面所示。这样才能实现在 Webpack 中转换 ES6 语法。
+
+3. 上面的配置，使得 ES6 的语法转换为 ES5，但是对于新增的 Promise、map 等新的特性，却没有进行转换。
 所以我们还需要使用另一个插件：`@babel/polyfill`
-   - 安装：
+   - 安装：  
 `npm install --save @babel/polyfill`
    - 配置  
    还要在webpack.config.js中进行配置：
@@ -88,7 +105,7 @@
 引入`@babel/polyfill`，然后就可以愉快的使用 ES6，不用担心兼容性了。
    - 注：`@babel/polyfill` 使用 ES5 的方式实现了 ES6 的新特性。保证了兼容性。
 
-8. 在 `presets` 属性中，还可以配置其他选项：
+4. 在 `presets` 属性中，还可以配置其他选项：
    ```javascript
       webpack.config.js
       presets: [['@babel/preset-env', {
@@ -112,7 +129,7 @@
    - 配置项
      - `target`  用来设置目标浏览器的版本。babel 会根据浏览器版本决定是否对 ES6 语法进行编译，如果浏览器原生支持，就不需要编译。
 
-9. 如果觉得 `options` 中的配置项过多，我们可以将配置项拿出来。新建一个 `.babelrc` 文件，以 json 格式填入 `options` 中的内容：
+5. 如果觉得 `options` 中的配置项过多，我们可以将配置项拿出来。新建一个 `.babelrc` 文件，以 json 格式填入 `options` 中的内容：
    ```javascript
       .babelrc
       {
@@ -129,9 +146,9 @@
    ```
    然后将webpack.config.js中的内容注释掉。
 
-10. 2020.12.05 新增：现在的babel 配置文件，已经更名为：babel.config.json，内容和.babelrc 一样，都是 json格式的内容。配置说明：[configuration](https://babeljs.io/docs/en/usage/#configuration)
+6. 2020.12.05 新增：现在的babel 配置文件，已经更名为：babel.config.json，内容和.babelrc 一样，都是 json格式的内容。配置说明：[configuration](https://babeljs.io/docs/en/usage/#configuration)
 
-11. 如果我们写的是业务代码，可以使用 polyfill，同时配置 `preset` 属性和 `useBuildIns` 属性，将polyfill 打包进入输出的 js 文件中。但是，如果我们写的是框架或者是第三方服务，我们就不能将 polyfill 打包到最终的 js 文件中，因为会污染全局环境，此时，就需要进行另外的配置。
+7. 如果我们写的是业务代码，可以使用 polyfill，同时配置 `preset` 属性和 `useBuildIns` 属性，将polyfill 打包进入输出的 js 文件中。但是，如果我们写的是框架或者是第三方服务，我们就不能将 polyfill 打包到最终的 js 文件中，因为会污染全局环境，此时，就需要进行另外的配置。
     - 首先在我们写的 js 代码中，不导入 `@babel/polyfill` 这个包，
 然后安装 `@babel/plugin-transform-runtime` 、`@babel/runtime`，安装命令如下：  
       - `npm install --save-dev @babel/plugin-transform-runtime`  
@@ -158,4 +175,4 @@
 `npm install --save @babel/runtime-corejs2`  
 `corejs` 为 `3`：    `npm install --save @babel/runtime-corejs3`
 
-12. 详细的参考资料：[babel-plugin-transform-runtime](https://babeljs.io/docs/en/babel-plugin-transform-runtime)
+8. 详细的参考资料：[babel-plugin-transform-runtime](https://babeljs.io/docs/en/babel-plugin-transform-runtime)
