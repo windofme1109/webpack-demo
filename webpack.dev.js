@@ -17,22 +17,15 @@ const devConfig = {
     },
     plugin: [
         new webpack.HotModuleReplacementPlugin()
-    ]
+    ],
+
+    optimization: {
+         usedExports: true
+    }
 }
 
-// module.exports = merge(devConfig, commonConfig);
+module.exports = merge(devConfig, commonConfig);
 
-const a = {
-    num: [1, 2],
-    name: 'jack'
-}
-const b = {
-    num: [4, 5],
-    age: 25
-}
-// { num: [ 1, 2, 4, 5 ], name: 'jack', age: 25 }
-const c = merge(a, b);
-console.log(c);
 // const path = require('path') ;
 //
 // var HtmlWebpackPlugin = require('html-webpack-plugin') ;
