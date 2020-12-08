@@ -69,6 +69,8 @@ template 属性指定一个 html 模板，值为模板的绝对或者相对路�
      ```
 
      CleanWebpackPlugin() 在不传入任何配置项的情况下，我们在output 配置的path 路径下的所有文件都会被删除，而目录本身不会被删除。如果使用webpack 4.0 以上的版本，在项目根目录下的dist文件夹内的文件会被移除。  
+     在最新版的 webpack 中  CleanWebpackPlugin 插件中不需要写里面的目标路径，会自动清除生成的文件夹，比如是 build 文件夹。
+   
      官方说明：
      ```javascript
         /**
