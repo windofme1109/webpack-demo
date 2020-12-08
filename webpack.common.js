@@ -72,8 +72,14 @@ module.exports = {
             // 指定HtmlWebpackPlugin插件使用的模板是src目录下的index.html
             template: 'src/index.html'
         }),
+        // 在最新版的 webpack 中  CleanWebpackPlugin 插件中不需要写里面的目标路径，会自动清除生成的文件夹，比如是 build 文件夹
         new CleanWebpackPlugin(),
     ],
+    optimization: {
+        splitChunks: {
+            chunks: 'all'
+        }
+    },
     output: {
         filename: '[name].js',
         path: path.join(__dirname, 'dist'),
