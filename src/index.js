@@ -16,7 +16,8 @@ import {add} from './math';
 // console.log(_.join([1, 2, 3, 4], '***'));
 
 function getComponent() {
-    return import('lodash').then(({default: _}) => {
+    // 添加 magic comment 将打包后的 lodash 模块命名为 lodash，而不是 0.js
+    return import(/*webpackChunkName:"lodash"*/'lodash').then(({default: _}) => {
         const element = document.createElement('div');
         element.innerHTML = _.join([1, 2, 3, 4, 5], '*');
         return element;
