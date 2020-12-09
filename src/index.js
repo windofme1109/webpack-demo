@@ -10,8 +10,11 @@
 
 
 import {add} from './math';
+import _ from 'lodash';
 
-add(1, 3);
+console.log(_.join([1, 2, 3, 4], '-'));
+console.log(_.join([1, 2, 3, 4], '***'));
+// add(1, 3);
 
 // class App extends Component {
 //
