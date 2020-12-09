@@ -84,4 +84,18 @@
 
 2. import() 函数支持 Promise，所以可以使用 then() 方法链式调用。
 
-2. import() 还不是正式的 ES 规范，
+3. import() 还不是正式的 ES 规范，直接使用 webpack 打包可能会报错，所以，我们这里需要引入一个 babel 插件：`babel-plugin-dynamic-import-webpack`，这个插件的作用是将动态导入 `import()` 转换为 webpack 下的 `require.ensure`。这样才能使用动态导入。
+   - 安装  
+     `npm install babel-plugin-dynamic-import-webpack --save-dev`
+   - 配置  
+     在 `.babelrc` 或者 `babel.config.json` 中进行配置：
+     ```json
+        {
+            "plugins": ["dynamic-import-webpack"]
+        }
+     ```
+   - `babel-plugin-dynamic-import-webpack` 的说明：[babel-plugin-dynamic-import-webpack](https://github.com/airbnb/babel-plugin-dynamic-import-webpack#readme)
+
+4. import() 动态导入的模块，打包后，会生成一个 `0.js` 的文件。
+
+5. 2020.12.09 新增：更高版本的 node 好像支持 import() 语法，不使用 `babel-plugin-dynamic-import-webpack` 这个插件也能实现打包。

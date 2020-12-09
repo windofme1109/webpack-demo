@@ -10,10 +10,23 @@
 
 
 import {add} from './math';
-import _ from 'lodash';
+// import _ from 'lodash';
+//
+// console.log(_.join([1, 2, 3, 4], '-'));
+// console.log(_.join([1, 2, 3, 4], '***'));
 
-console.log(_.join([1, 2, 3, 4], '-'));
-console.log(_.join([1, 2, 3, 4], '***'));
+function getComponent() {
+    return import('lodash').then(({default: _}) => {
+        const element = document.createElement('div');
+        element.innerHTML = _.join([1, 2, 3, 4, 5], '*');
+        return element;
+    })
+}
+
+getComponent().then(element => {
+    document.body.appendChild(element);
+})
+
 // add(1, 3);
 
 // class App extends Component {
