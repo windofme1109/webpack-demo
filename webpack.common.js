@@ -78,8 +78,28 @@ module.exports = {
     ],
     optimization: {
         splitChunks: {
-            chunks: 'all'
-        }
+            chunks: 'all',
+            // minSize: 30,
+            // maxSize: 500,
+            maxAsyncRequests: 30,
+            maxInitialRequests: 30,
+            automaticNameDelimiter: '~',
+            enforceSizeThreshold: 50000,
+            cacheGroups: {
+                defaultVendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10,
+                    fileName: 'vendor.js',
+                    reuseExistingChunk: true
+                },
+                default: {
+                    priority: -20,
+                    fileName: 'common.js',
+                    reuseExistingChunk: true
+                }
+            }
+        },
+
     },
     output: {
         filename: '[name].js',

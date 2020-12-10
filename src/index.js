@@ -16,7 +16,10 @@ import {add} from './math';
 // console.log(_.join([1, 2, 3, 4], '***'));
 
 function getComponent() {
-    // 添加 magic comment 将打包后的 lodash 模块命名为 lodash，而不是 0.js
+    // 添加 magic comment
+    // magic comment 实际上是用来配动态导入的，也就是使用块级注释：/**/ 设置配置项
+    // 在导入的模块前面添加 magic comment，然后配置项就会生效
+    // 将打包后的 lodash 模块命名为 lodash，而不是 0.js
     return import(/*webpackChunkName:"lodash"*/'lodash').then(({default: _}) => {
         const element = document.createElement('div');
         element.innerHTML = _.join([1, 2, 3, 4, 5], '*');
