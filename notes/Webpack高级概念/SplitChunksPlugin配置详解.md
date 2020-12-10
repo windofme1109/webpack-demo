@@ -28,7 +28,7 @@
      - `initial` 表示对只同步代码做分割。
    - `minSize` 值为数字，单位为字节（Byte）。表示引入的第三方模块体积如果小于 `minSize`，就不分割打包了，只有大于 `minSize` 才会打包。
    - `maxSize` 值为数字，单位为字节（Byte）。这个配置项使用的比较少。作用是进行代码分割后的模块，如果体积大于 `maxSize`，则 webpack 会继续尝试进行打包，看看能不能分割成更小的体积。
-   - `minChunks` 默认为 1。表示一个模块，在 index.js （入口文件）中引用的次数，如果大于 `minChunks`，则进行代码分割，否则不进行代码分割。
+   - `minChunks` 默认为 1。表示一个第三方模块，在打包生成的 chunks 中被引用的次数，如果大于 `minChunks`，则对这个第三方进行代码分割，否则不进行代码分割。
      > Minimum number of chunks that must share a module before splitting.
    - `maxAsyncRequests` 同时请求的文件的最大数量。这个参数用来限制代码分割的模块的数量。比如分割打包成 10 个文件，那么浏览器在请求这些文件的时候，要发送 10 次请求。当我设置了 `maxAsyncRequests` 这个参数后，代码分割数量后的模块的数量就被限定为 `maxAsyncRequests` 指定的数量。这样就间接的限定了浏览器发送请求的数量。如果我们引用的模块数量超过了 `maxAsyncRequests` 指定的数量，假设 `maxAsyncRequests` 设定为 5，我们引入的模块数量是 10，那么 webpack 会打包前 5 个模块，后面的 5 个就不进行分割打包了。
      > Maximum number of parallel requests when on-demand loading.
