@@ -1,7 +1,7 @@
 // webpack.dev.js 是开发环境下的打包配置文件
 const webpack = require('webpack') ;
 const {merge} = require('webpack-merge');
-
+const path = require('path') ;
 const commonConfig = require('./webpack.common');
 
 
@@ -22,6 +22,12 @@ const devConfig = {
 
     optimization: {
         usedExports: true
+    },
+
+    output: {
+        filename: '[name].js',
+        chunkFilename: '[name].chunk.js',
+        path: path.join(__dirname, 'dist'),
     }
 }
 

@@ -39,6 +39,8 @@
     "@babel/polyfill": "^7.4.4",
     "@babel/runtime": "^7.12.5",
     "@babel/runtime-corejs2": "^7.12.5",
+    "imports-loader": "^0.8.0",
+    "jquery": "^3.5.1",
     "lodash": "^4.17.20",
     "mini-css-extract-plugin": "^1.2.0",
     "react": "^16.8.6",

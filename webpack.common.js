@@ -3,6 +3,8 @@ const path = require('path') ;
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const webpack = require('webpack');
+
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 // 在打包之前删除打包文件的存放目录
@@ -27,9 +29,15 @@ module.exports = {
         new CleanWebpackPlugin(),
         new MiniCssExtractPlugin({
             filename: '[name].css',
-            chunkFilename: '[name].chunk.js'
+            chunkFilename: '[name].chunk.css'
+        }),
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            _join: ['lodash', 'join']
         })
     ],
+    // 忽略打包时的性能提示
+    performance: false,
     module: {
         // 规则。可以是多个
         rules: [
@@ -77,26 +85,44 @@ module.exports = {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 // 加载loader
-                loader: 'babel-loader',
-                options: {
-                    "plugins": [
-                        [
-                            "@babel/plugin-transform-runtime",
-                            {
-                                "absoluteRuntime": false,
-                                "corejs": 2,
-                                "helpers": true,
-                                "regenerator": true,
-                                "useESModules": false
-                            }
-                        ]
-                    ]
-                }
+                use: [
+                    {
+                        loader: 'babel-loader',
+                        options: {
+                            "plugins": [
+                                [
+                                    "@babel/plugin-transform-runtime",
+                                    {
+                                        "absoluteRuntime": false,
+                                        "corejs": 2,
+                                        "helpers": true,
+                                        "regenerator": true,
+                                        "useESModules": false
+                                    }
+                                ]
+                            ]
+                        }
+                    },
+
+                        // 将模块的 this 指向 window
+                    {loader: 'imports-loader?this=>window'}
+
+
+                ]
+
             }
         ]
     },
 
     optimization: {
+        // 给老版本的 webpack 用的
+        // 老版本的 webpack 在打包的过程中，可能入口文件内容没有变化，但是文件的 hash 值发生变化的情况
+        // 这是由于 业务逻辑代码和第三方模块的代码的关系变化导致的
+        // 设置了下面的 runtimeChunk 属性，并配置 name 为 runtime，可以分离这种关系
+        // 使得只有入口文件内容变化时，文件的 hash 值才跟着发生变化
+        runtimeChunk: {
+            name: 'runtime'
+        },
         splitChunks: {
             chunks: 'all',
             // minSize: 30,
@@ -121,9 +147,9 @@ module.exports = {
         },
 
     },
-    output: {
-        filename: '[name].js',
-        chunkFilename: '[name].chunk.js',
-        path: path.join(__dirname, 'dist'),
-    }
+    // output: {
+    //     filename: '[name].js',
+    //     chunkFilename: '[name].chunk.js',
+    //     path: path.join(__dirname, 'dist'),
+    // }
 }

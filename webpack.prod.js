@@ -1,10 +1,17 @@
 // webpack.prod.js 是生产环境下的打包配置文件
 const {merge} = require('webpack-merge');
 const commonConfig = require('./webpack.common');
-
+const path = require('path') ;
 const prodConfig = {
     mode: 'production',
     devtool: 'cheap-module-source-map',
+    output: {
+        // [contenthash] 这个占位符表示，根据文件内容，生成 hash 值
+        // 这样文件内容有变化，hash 也跟着变化，从而文件名称也会变化，然后浏览器就能请求到最新的内容，而不是使用缓存
+        filename: '[name].[contenthash].js',
+        chunkFilename: '[name].[contenthash].chunk.js',
+        path: path.join(__dirname, 'dist'),
+    }
 }
 
 module.exports = merge(commonConfig, prodConfig);
