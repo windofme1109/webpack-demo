@@ -2,7 +2,10 @@
   "name": "webpack-demo",
   "version": "1.0.0",
   "description": "",
-  "sideEffects": false,
+  "sideEffects": [
+    "*.css",
+    "*.scss"
+  ],
   "private": true,
   "scripts": {
     "dev-build": "webpack --config webpack.dev.js",
@@ -37,6 +40,7 @@
     "@babel/runtime": "^7.12.5",
     "@babel/runtime-corejs2": "^7.12.5",
     "lodash": "^4.17.20",
+    "mini-css-extract-plugin": "^1.2.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   }

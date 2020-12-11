@@ -15,6 +15,10 @@ import {add} from './math';
 // console.log(_.join([1, 2, 3, 4], '-'));
 // console.log(_.join([1, 2, 3, 4], '***'));
 
+import './style.css';
+
+console.log('hello world');
+
 function getComponent() {
     // 添加 magic comment
     // magic comment 实际上是用来配动态导入的，也就是使用块级注释：/**/ 设置配置项
