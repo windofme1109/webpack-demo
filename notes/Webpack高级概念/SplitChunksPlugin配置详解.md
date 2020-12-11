@@ -65,3 +65,8 @@
     - `priority` 用来设代码分割的优先级，也就是如果一个模块同时符合 vendors 和 default 的要求，那么按照哪个配置进行打包呢，答案是根据 `priority` 决定，`priority` 值越小，打包的优先级越高。
     - `reuseExistingChunk` 的作用是，如果一个模块中引用了其他模块，而被引用的模块已经被分割打包。那么将不会重复打包这个被引用的模块，而是重复使用这个已经被打包的模块。
        > If the current chunk contains modules already split out from the main bundle, it will be reused instead of a new one being generated. This can impact the resulting file name of the chunk.
+
+## 4.一个小的知识点 -- `chunkFilename`  配置项
+
+- `chunkFilename` 这个配置项用来生成非入口文件的打包后的文件名。比如举个例子：在 `entry` 中，配置的入口文件为：`main: './src/index.js'`，那么这个入口文件，打包后，走的配置是 `output` 中的 `fileName: '[name].js'`，而 index.js 文件中引用了其他模块，比如说 `lodash`，这个lodash 并不是入口文件，而是 index.js 引用的一个模块，这个模块会被单独打包，生成一个 chunk，所有会走 `output` 中的 `chunkFilename: '[name].chunk.js'` 这个配置。
+   > This option determines the name of non-entry chunk files. See output.filename option for details on the possible values.
