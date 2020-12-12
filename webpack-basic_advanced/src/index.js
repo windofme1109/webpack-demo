@@ -15,7 +15,7 @@
 
 // import {ui} from './jquery.ui';
 
-console.log(this === window);
+// console.log(this === window);
 // ui();
 // const dom = $('div');
 // dom.html(_.join(['hello', 'world'], ', '));
