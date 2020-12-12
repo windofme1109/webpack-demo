@@ -105,7 +105,7 @@ module.exports = {
                     },
 
                         // 将模块的 this 指向 window
-                    {loader: 'imports-loader?this=>window'}
+                    // {loader: 'imports-loader?this=>window'}
 
 
                 ]

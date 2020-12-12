@@ -14,7 +14,66 @@ const devConfig = {
         open: true,
         port: 8080,
         hot: true,
-        hotOnly: true
+        hotOnly: true,
+
+        // 默认情况下，devServer 不会对根路径进行转发
+        // 如果想对根路径进行代理，则必须配置 index 字段为空字符串或者 false
+        // index: '',
+        // 使用webpack devServer 实现代理转发
+        proxy: {
+
+            // 在进行代理转发的时候，代理会将原始的请求头带上
+            // 设置了 changeOrigin 为 true，则不会携带原始的请求头，一般情况下，都会设置上这个字段
+            changeOrigin: true,
+            // 配置代理的请求头，代理会带着这个请求头发送到服务器端
+            headers: {
+                host: 'www.dell-lee.com',
+                cookies: ''
+            },
+
+            //
+            // 配置是否对 https 生效
+            secure: false,
+            // 因为我们写的路径是相对路径，所以任何以 /react/api 开头的接口，都会被代理到 http://www.dell-lee.com/react/api/ 下
+            // /react/api/header.json ---> http://www.dell-lee.com/react/api/header.json
+            // '/react/api': 'http://www.dell-lee.com',
+
+            // 如果我又多个接口，都想代理到 http://localhost:3000 下
+            // 那么将这多个接口放到一个数组中，并将数组赋给 context
+            // context: ['/auth', '/api'],
+            // target: 'http://localhost:3000',
+            // 对接口做高级配置
+            '/react/api': {
+                // 配置代理的目标地址
+                target: 'http://www.dell-lee.com',
+
+                // pathRewrite 这个字段，用来改写我们我们接口的一些内容
+                // 比如说，我们真正想请求的接口地址是：/react/api/header.json，但是这个接口目前不可用
+                // 只能使用 /react/api/demo.json 这个接口，但是我们又不能直接改动接口
+                // 所以使用 pathRewrite 这个字段，将 header.json 重写为 demo.json
+                // 表面上发送的请求是 /react/api/demo.json，实际上请求的是 /react/api/demo.json
+
+                // 对代理做一些精细的控制
+                // 拦截请求或者响应
+                // 可以访问 request、response、proxyOption
+                // 返回值有下面三种情况：
+                // 返回 null 或 undefined，使用原来的代理处理请求
+                // 返回 false，给这次请求返回一个 404 错误
+                // 返回一个 path，作为新的代理路径
+                bypass: function(req, res, proxyOptions) {
+                    if (req.headers.accept.indexOf('html') !== -1) {
+
+                        // 如果检测这次请求的是 html，那么就将代理地址指向 /index.html
+                        console.log('Skipping proxy for browser request.');
+                        return '/index.html';
+                    }
+                },
+
+                pathRewrite: {
+                    'header.json': 'demo.json'
+                }
+            }
+        }
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin()
