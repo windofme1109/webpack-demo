@@ -16,6 +16,43 @@ const devConfig = {
         hot: true,
         hotOnly: true,
 
+        // 这个配置项用于配置前端路由转发（只在本地起作用）
+        // 我们使用 react-router-dom 的时候，使用 BrowserRouter 设置前端路由
+        // 那么进行路由切换的时候，就会向后端发送请求
+        // 由于是前端路由，那么后端不会对这个请求进行处理
+        // 返回结果肯定是 404，那么怎么解决呢
+        // 设置 historyApiFallback 为 true
+        // 则 只要后端返回结果是 404，devServer 就会将 index.html 作为结果，转发给浏览器
+        // 由于 index.html 引用了我们设置好的前端路由，那么自然会根据当前地址栏的地址渲染相应的组件
+        // 间接实现了前端路由跳转
+        // 当然，这个配置项的作用是使用 html5 history api，就可以实现上面的效果
+        // BrowserRouter 底层就是基于 html5 history api，所以可以使用这个配置项
+        // historyApiFallback: true,
+        // historyApiFallback 还可以设置为对象
+        historyApiFallback: {
+            // rewrites 字段相当于是重定向
+            // from 表示我们访问的路径，
+            // to 表示目标路径，也就是如果我们访问的 from 代表的路径，那么就重定向到 to 代表的路径
+            rewrites: [
+                { from: /^\/$/, to: '/views/landing.html' },
+                { from: /^\/subpage/, to: '/views/subpage.html' },
+                { from: /./, to: '/views/404.html' },
+
+                // to 的值还可以设置为函数
+                // 接收context 作为参数，context 有三个属性：
+                // parsedUrl: Information about the URL as provided by the URL module's url.parse.
+                // match: An Array of matched results as provided by String.match(...).
+                // request: The HTTP request object
+                // 因此，根据这些属性，就可以做更精细的控制路由的跳转
+                {
+                    from: /^\/libs\/.*$/,
+                    to: function(context) {
+                        return '/bower_components' + context.parsedUrl.pathname;
+                    }
+                }
+            ]
+        },
+
         // 默认情况下，devServer 不会对根路径进行转发
         // 如果想对根路径进行代理，则必须配置 index 字段为空字符串或者 false
         // index: '',
