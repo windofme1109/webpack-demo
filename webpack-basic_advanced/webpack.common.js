@@ -34,6 +34,28 @@ module.exports = {
         new webpack.ProvidePlugin({
             $: 'jquery',
             _join: ['lodash', 'join']
+        }),
+
+        new AddAssetHtmlPlugin({
+            filepath: path.resolve(__dirname, './dll/vendor.dll.js'),
+        }),
+
+        // 入口中配置了几个第三方模块，这里就要使用 AddAssetHtmlPlugin 引入向 index.html 几次
+        new AddAssetHtmlPlugin({
+            filepath: path.resolve(__dirname, './dll/react.dll.js'),
+        }),
+        new webpack.DllReferencePlugin({
+            // 指定了 manifest.json 的路径
+            // 负责引用 第三方模块与 vendor.dll.js （全局变量 vendor）的映射关系
+            // 引用第三方插件时，这个插件去 manifest.json 去寻找上述的映射关系
+            // 找到了，就直接从 vendor.dll.js 中引用，就没有必要重新打包了
+            // 如果没有找到这个映射关系，就去 node_modules 中查找，并重新打包
+            manifest: path.resolve(__dirname, './dll/vendor.manifest.json')
+        }),
+
+        // 入口中配置了几个第三方模块，这里就要使用 DllReferencePlugin 分析几次 manifest.json
+        new webpack.DllReferencePlugin({
+            manifest: path.resolve(__dirname, './dll/react.manifest.json')
         })
     ],
     // 忽略打包时的性能提示
@@ -82,7 +104,8 @@ module.exports = {
             },
             // 配置babel插件
             {
-                test: /\.js$/,
+                // 既能解析 js，也能解析 jsx
+                test: /\.jsx?$/,
                 exclude: /node_modules/,
                 // 加载loader
                 use: [
