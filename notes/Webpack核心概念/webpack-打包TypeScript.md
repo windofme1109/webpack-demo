@@ -78,8 +78,10 @@
      - 输出文件为 bundle.js。
    - 新的字段
      - `resolve` 该字段用来配置 Webpack 如何寻找模块所对应的文件。Webpack 内置 JavaScript 模块化语法解析功能，默认会采用模块化标准里约定好的规则去寻找，但你也可以根据自己的需要修改默认的规则。参考资料：[webpack学习笔记--配置resolve](https://www.cnblogs.com/joyco773/p/9049760.html)
-     - `resolve.extension` 在导入语句没带文件后缀时，Webpack 会自动带上后缀后去尝试访问文件是否存在。  resolve.extensions 用于配置在尝试过程中用到的后缀列表。值为数组。默认是：`extensions: ['.js', '.json']`，例如：这样导入一个模块：`require(./data)`，webpack 首先去寻找 data.js，如果找不到，就去寻找 data.json。如果还是找不到就报错。
-     
+     - `resolve.extension` 在导入语句没带文件后缀时，Webpack 会自动带上后缀后去尝试访问文件是否存在。  resolve.extensions 用于配置在尝试过程中用到的后缀列表。值为数组。默认是：`extensions: ['.js', '.json']`，例如：这样导入一个模块：`require(./data)`，webpack 首先去寻找 data.js，如果找不到，就去寻找 data.json。如果还是找不到就报错。  
+       配置 `extension` 这个字段时，需要注意的是，不是所有后缀都能加到里面，因为每匹配一次，都会调用底层的文件模块去查找对应类型的文件，这样对打包的性能有损耗。所以，一般情况下我们只配置 js、jsx 等同 js 相关的文件。
+     - `resolve.mainFiles` 当我们导入一个模块时，只指定了路径，没有指定具体的文件，那么 webpack 怎么知道我要导入的是哪个文件呢，答案就是根据 `mainFiles` 的值去查找。`mainFiles` 接收一个数组，数组的的值为文件名，例如：`mainFiles: ['index', 'child']`webpack 会按照 `mainFiles` 提供的文件名，依次去目标目录中去查找指定的 index.js 文件 或 child.js 文件。一般来说，我们不会使用这个配置项，因为对打包的性能有影响。
+     - `resolve.alias` 通过别名来把原导入路径映射成一个新的导入路径，值为对象，例如：`alias: {dell: './src/child'}`，当你通过  `import Button from 'dell';` 导入时，实际上被 `alias` 等价替换成了  `import Button from './src/child`'
  
 ## 3. loader
 
