@@ -45,6 +45,8 @@
    - `Rule.test` 正则表达式，用来检测文件的类型
    - `Rule.use` 值为数组，这样可以配置多个 loader。数组的元素是对象，对象用来设置使用什么 loader，以及对 loader 的各种配置。当只有一个 loader 时，可以不使用数组，而使用一个对象。
    - `Rule.use.loader` 指定 loader
+   - `Rule.use.force` 设置为 `pre`，表示优先使用这个 loader。默认情况下，loader 的使用顺序是从左向右，从后到前。那么如果我配置了一个 loader，例如 `eslint-loader`，它的位置在 `babel-loader` 之前，但是 `eslint-loader` 必须在 `babel-loader` 之前起作用，那么我就可以使用 `force` 这个字段，使得 `eslint-loader` 先于 `babel-loader` 执行。  
+     **注意**：没有在 webpack 官网上找到这个字段。
    - `Rule.use.options` loader 的具体配置，这个配置和具体的 loader 有关，需要我们查询具体 loader 的文档。
    
 ## 2. file-loader
