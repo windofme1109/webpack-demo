@@ -47,4 +47,43 @@
 
 2. 通过上面的描述，我们可以得知，只有第二次即以后的请求才会使用缓存。实际上，我们希望的时尽量提搞第一次加载的速度。
 
-3. 打开浏览器的调试窗口，在 console 下，按下快捷键：ctrl + shift + p，在弹出的界面输入：coverage。
+3. 在 index.js 添加如下的代码：
+   ```javascript
+      // index.js
+      document.addEventListener('click', function(e) {
+          const element = document.createElement('div');
+          element.innerHTML = 'hello world';
+          document.body.append(element);
+      })
+   ```
+
+3. 打开浏览器的调试窗口，在 console 下，按下快捷键：ctrl + shift + p，在弹出的界面输入：coverage。点击录制按钮，就会出现我们的 js 代码的一个利用率：如下图所示：
+
+下面的这一部分代码并没有执行，因为只有点击事件发生，才会执行下面的代码。因此在首页加载的时候，加载了一定的“无用”代码，会浪费一定的浏览器执行性能。
+   ```javascript
+      const element = document.createElement('div');
+      element.innerHTML = 'hello world';
+      document.body.append(element);
+   ```
+4. 怎么解决这个问题呢，答案是我们将不需要在首页执行的逻辑放到一个单独的模块中，通过 import() 函数，在需要的时候动态导入。
+
+5. 我们将点击事件的处理函数放到一个单独的模块：`click.js`，具体内容如下所示：
+   ```javascript
+      function handleClick(e) {
+          const element = document.createElement('div');
+          element.innerHTML = 'hello world';
+          document.body.append(element);
+      }
+      
+      export default handleClick;
+   ```
+
+6. 那么 index.js 我们也要进行修改：
+   ```javascript
+      document.addEventListener('click', function(e) {
+          import('./click').then(({default: handleClick}) => {
+              handleClick();
+          })      
+      })
+   ```
+   在点击事件发生的时候，我们再去动态加载 `click.js`。这样就提高了代码的利用率。
