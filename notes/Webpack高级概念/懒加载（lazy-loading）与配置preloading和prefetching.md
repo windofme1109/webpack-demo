@@ -58,8 +58,8 @@
    ```
 
 3. 打开浏览器的调试窗口，在 console 下，按下快捷键：ctrl + shift + p，在弹出的界面输入：coverage。点击录制按钮，就会出现我们的 js 代码的一个利用率：如下图所示：
-
-下面的这一部分代码并没有执行，因为只有点击事件发生，才会执行下面的代码。因此在首页加载的时候，加载了一定的“无用”代码，会浪费一定的浏览器执行性能。
+![chrome-coverage](../images/chrome-coverage.png)
+利用率是 96.4%，这是因为下面的这一部分代码并没有执行，因为只有点击事件发生，才会执行下面的代码。因此在首页加载的时候，加载了一定的“无用”代码，会浪费一定的浏览器执行性能。
    ```javascript
       const element = document.createElement('div');
       element.innerHTML = 'hello world';
@@ -86,4 +86,35 @@
           })      
       })
    ```
-   在点击事件发生的时候，我们再去动态加载 `click.js`。这样就提高了代码的利用率。
+   在点击事件发生的时候，我们再去动态加载 `click.js`。无用的代码少了，就提高了代码的利用率。
+
+7. prefetching 和 preloading
+   - 当前页面的需要动态引入一些模块，在页面加载的时候不需要，但是当我们触发一些事件的时候需要这些模块。比如说，点击登录按钮，会弹出一个登录的模态框。实际上，加载首页时，不需要将模态框的代码加载。等点击登录按钮时，再加载这部分的代码。但是这样现加载有可能由于网络延迟等问题导致加载过慢。所以为了解决这个问题，webpack 提供了两个 magic comment：prefetch 和 preload。
+   - 参考资料：[Prefetching/Preloading modules
+](https://v4.webpack.js.org/guides/code-splitting/#prefetchingpreloading-modules)
+   - 示例：
+     ```javascript
+        document.addEventListener('click', function(e) {
+            // 设置 webpackPrefetch 为 true，表示核心 js 加载完成以后，等待带宽空闲了再去加载可能用到的其他模块
+            // webpackPreload 用法和 webpackPrefetch 类似
+            // 使用多个 magic comment，即在不同行，写多个 /* ... */ 即可
+            import(/* webpackPrefetch: true */
+                   /* webpackChunkName:"click" */
+     './click').then(({default: handleClick}) => {
+                  handleClick();
+            })      
+        })
+     ```
+   - prefetch 与 preload 的区别
+     - preload 是与核心需求的 js 文件一起加载，而 prefetch 则是表示核心 js 加载完成以后，等待带宽空闲了再去加载可能用到的其他模块。
+     - 设置为 preload 的模块的优先级为中，并且会被立即下载，而设置为 prefetch 的模块会等到浏览器空闲后再去下载。
+     - 父模块（parent chunk）应立即请求设置为 preload 的模块。而设置为 prefetch 的模块可以在将来的任何时候使用。
+     - prefetch 的浏览器兼容性更好。
+   - 推荐使用 prefetch。
+   
+8. 总结
+   - **在书写高质量的前端代码时，要更加关注的是代码的利用率，而不是缓存**。
+   - 多些异步逻辑，将首页加载不需要的内容放到单独的模块中，需要的时候再加载。
+   - 交互事件的处理逻辑放到异步加载的模块中，事件发生时再加载。
+   - webpack 默认对异步加载的模块进行打包，不打包同步的代码。这样可以提升打包性能，提高首页的加载速度。
+   - 在动态引入模块时，magic comment 提供的预加载功能，推荐使用 prefetch，而不是 preload。

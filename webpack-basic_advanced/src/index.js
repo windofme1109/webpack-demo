@@ -31,18 +31,46 @@
 //
 // console.log('hello world');
 //
+
+
+// document.addEventListener('click', function(e) {
+//     import('./click').then(({default: handleClick}) => {
+//         handleClick();
+//     })
+// })
+
+document.addEventListener('click', function(e) {
+    // magic comment
+    // 设置 webpackPrefetch 为 true，表示核心 js 加载完成以后，等待带宽空闲了再去加载可能用到的其他模块
+    // 使用多个 magic comment，即在不同行，写多个 /* ... */ 即可
+    import(/* webpackPrefetch: true */
+        /* webpackChunkName:"click" */
+        './click').then(({default: handleClick}) => {
+        handleClick();
+    })
+})
+
+// document.addEventListener('click', function (e) {
+//         const element = document.createElement('div');
+//         element.innerHTML = 'Hello World';
+//         document.body.appendChild(element);
+// })
 // function getComponent() {
 //     // 添加 magic comment
 //     // magic comment 实际上是用来配动态导入的，也就是使用块级注释：/**/ 设置配置项
 //     // 在导入的模块前面添加 magic comment，然后配置项就会生效
 //     // 将打包后的 lodash 模块命名为 lodash，而不是 0.js
-//     return import(/*webpackChunkName:"lodash"*/'lodash').then(({default: _}) => {
+//     return import(/*webpackChunkName:"lodash"*/ 'lodash').then(({default: _}) => {
 //         const element = document.createElement('div');
 //         element.innerHTML = _.join([1, 2, 3, 4, 5], '*');
 //         return element;
 //     })
 // }
-//
+// document.addEventListener('click', function (e) {
+//     getComponent().then(element => {
+//         document.body.appendChild(element);
+//     })
+// })
 // getComponent().then(element => {
 //     document.body.appendChild(element);
 // })

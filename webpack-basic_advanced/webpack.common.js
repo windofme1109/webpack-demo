@@ -38,23 +38,23 @@ module.exports = {
 
         // 入口中配置了几个第三方模块，这里就要使用 AddAssetHtmlPlugin 引入向 index.html 几次
         // 所以我们可以使用一个数组。配置多个 filepath，向 index.html 中引入 js 文件
-        new AddAssetHtmlPlugin([
-            {filepath: path.resolve(__dirname, './dll/vendor.dll.js')},
-            {filepath: path.resolve(__dirname, './dll/react.dll.js')},
-        ]),
-        new webpack.DllReferencePlugin({
-            // 指定了 manifest.json 的路径
-            // 负责引用第三方模块与 vendor.dll.js （全局变量 vendor）的映射关系
-            // 引用第三方插件时，这个插件去 manifest.json 去寻找上述的映射关系
-            // 找到了，就直接从 vendor.dll.js 中引用，就没有必要重新打包了
-            // 如果没有找到这个映射关系，就去 node_modules 中查找，并重新打包
-            manifest: path.resolve(__dirname, './dll/vendor.manifest.json')
-        }),
-
-        // 入口中配置了几个第三方模块，这里就要使用 DllReferencePlugin 分析几次 manifest.json
-        new webpack.DllReferencePlugin({
-            manifest: path.resolve(__dirname, './dll/react.manifest.json')
-        })
+        // new AddAssetHtmlPlugin([
+        //     {filepath: path.resolve(__dirname, './dll/vendor.dll.js')},
+        //     {filepath: path.resolve(__dirname, './dll/react.dll.js')},
+        // ]),
+        // new webpack.DllReferencePlugin({
+        //     // 指定了 manifest.json 的路径
+        //     // 负责引用第三方模块与 vendor.dll.js （全局变量 vendor）的映射关系
+        //     // 引用第三方插件时，这个插件去 manifest.json 去寻找上述的映射关系
+        //     // 找到了，就直接从 vendor.dll.js 中引用，就没有必要重新打包了
+        //     // 如果没有找到这个映射关系，就去 node_modules 中查找，并重新打包
+        //     manifest: path.resolve(__dirname, './dll/vendor.manifest.json')
+        // }),
+        //
+        // // 入口中配置了几个第三方模块，这里就要使用 DllReferencePlugin 分析几次 manifest.json
+        // new webpack.DllReferencePlugin({
+        //     manifest: path.resolve(__dirname, './dll/react.manifest.json')
+        // })
     ],
     // 忽略打包时的性能提示
     performance: false,
@@ -76,20 +76,20 @@ module.exports = {
                 // 检测css文件
                 test: /\.css$/,
                 use: [
-                    // 'style-loader',
+                    'style-loader',
 
                     // MiniCssExtractPlugin.loader,
                     // 使用 mini-css-extract-plugin 对 css 代码进行分割，我们就不能使用 style-loader 进行打包
                     // 而是使用 mini-css-extract-plugin 提供的 loader
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            // you can specify a publicPath here
-                            // by default it uses publicPath in webpackOptions.output
-                            // publicPath: '../',
-                            // hmr: process.env.NODE_ENV === 'development',
-                        },
-                    },
+                    // {
+                    //     loader: MiniCssExtractPlugin.loader,
+                    //     options: {
+                    //         // you can specify a publicPath here
+                    //         // by default it uses publicPath in webpackOptions.output
+                    //         // publicPath: '../',
+                    //         // hmr: process.env.NODE_ENV === 'development',
+                    //     },
+                    // },
                     // 配置css-loader
                     {
                         loader: 'css-loader',
