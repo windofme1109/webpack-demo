@@ -4,18 +4,23 @@ const CopyrightWebpackPlugin = require('./plugins/copyright-webpack-plugin');
 
 module.exprts = {
 
-    mode: 'production',
+    mode: 'development',
+
+    entry: {
+        main: './src/index.js'
+    },
+    module: {
+        rules: [
+
+        ]
+    },
     plugins: [
         new CopyrightWebpackPlugin({
             name: '123'
         })
     ],
-    entry: {
-        main: './src/index.js'
-    },
-
     output: {
-        filename: '[name].js',
         path: path.resolve(__dirname, './dist'),
+        filename: '[name].js',
     }
 }
