@@ -1,5 +1,9 @@
 # 自己书写一个 loader
 
+## 1. 参考资料
+
+1. webpack 官网上的 loader 的 api：[Loader Interface](https://v4.webpack.js.org/api/loaders/)
+
 ## 1. 基本的自定义 loader
 
 1. loader 实际上就是一个函数，在打包前对源码进行处理，处理后webpack 才能对其进行打包以及后续的操作。
