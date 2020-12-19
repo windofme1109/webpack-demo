@@ -76,7 +76,7 @@ class CopyrightWebpackPlugin {
                      return 'copyright by qin';
                 },
                 // 指定文件的大小
-                // 值为函数，函数的返回值就是文件的大小
+                // 值为函数，函数的返回值就是文件的大小，单位是字节
                 size: function() {
                     return 21;
                 }
