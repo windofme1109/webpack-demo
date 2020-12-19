@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [自定义 plugin](#%E8%87%AA%E5%AE%9A%E4%B9%89-plugin)
+  - [1. 背景](#1-%E8%83%8C%E6%99%AF)
+  - [2. 书写自定义 plugin](#2-%E4%B9%A6%E5%86%99%E8%87%AA%E5%AE%9A%E4%B9%89-plugin)
+  - [3. 使用 hooks](#3-%E4%BD%BF%E7%94%A8-hooks)
+  - [4. 调试 plugin](#4-%E8%B0%83%E8%AF%95-plugin)
+  - [5. 总结](#5-%E6%80%BB%E7%BB%93)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 自定义 plugin
 
 ## 1. 背景

@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [webpack 打包多页面应用](#webpack-%E6%89%93%E5%8C%85%E5%A4%9A%E9%A1%B5%E9%9D%A2%E5%BA%94%E7%94%A8)
+  - [1. 背景](#1-%E8%83%8C%E6%99%AF)
+  - [2. 基本配置](#2-%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE)
+  - [3. 批量生成 `html-webpack-plugin` 配置](#3-%E6%89%B9%E9%87%8F%E7%94%9F%E6%88%90-html-webpack-plugin-%E9%85%8D%E7%BD%AE)
+  - [4. 总结](#4-%E6%80%BB%E7%BB%93)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # webpack 打包多页面应用
 
 ## 1. 背景

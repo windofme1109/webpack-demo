@@ -1,3 +1,14 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [懒加载（lazy-loading）与 配置 preloading 和 prefetching](#%E6%87%92%E5%8A%A0%E8%BD%BDlazy-loading%E4%B8%8E-%E9%85%8D%E7%BD%AE-preloading-%E5%92%8C-prefetching)
+  - [1. 背景](#1-%E8%83%8C%E6%99%AF)
+  - [1. 懒加载（lazy-loading）](#1-%E6%87%92%E5%8A%A0%E8%BD%BDlazy-loading)
+  - [2. preloading 和 prefetching（预加载）](#2-preloading-%E5%92%8C-prefetching%E9%A2%84%E5%8A%A0%E8%BD%BD)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 懒加载（lazy-loading）与 配置 preloading 和 prefetching
 
 ## 1. 背景

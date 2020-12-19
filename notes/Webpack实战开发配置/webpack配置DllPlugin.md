@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [webpack 配置 DllPlugin](#webpack-%E9%85%8D%E7%BD%AE-dllplugin)
+  - [1. 背景](#1-%E8%83%8C%E6%99%AF)
+  - [2. `add-asset-html-webpack-plugin` 的使用](#2-add-asset-html-webpack-plugin-%E7%9A%84%E4%BD%BF%E7%94%A8)
+  - [3. 配置 pakcage.json](#3-%E9%85%8D%E7%BD%AE-pakcagejson)
+  - [4. 对生成的 dll 文件进行映射](#4-%E5%AF%B9%E7%94%9F%E6%88%90%E7%9A%84-dll-%E6%96%87%E4%BB%B6%E8%BF%9B%E8%A1%8C%E6%98%A0%E5%B0%84)
+  - [5. 总结](#5-%E6%80%BB%E7%BB%93)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # webpack 配置 DllPlugin
 
 ## 1. 背景

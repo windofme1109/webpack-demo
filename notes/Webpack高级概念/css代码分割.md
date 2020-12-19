@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [利用插件完成 css 代码的分割](#%E5%88%A9%E7%94%A8%E6%8F%92%E4%BB%B6%E5%AE%8C%E6%88%90-css-%E4%BB%A3%E7%A0%81%E7%9A%84%E5%88%86%E5%89%B2)
+  - [1. 背景](#1-%E8%83%8C%E6%99%AF)
+  - [2. `mini-css-extract-plugin` 的 1.3.3 版本与 webpack 4 的兼容性问题](#2-mini-css-extract-plugin-%E7%9A%84-133-%E7%89%88%E6%9C%AC%E4%B8%8E-webpack-4-%E7%9A%84%E5%85%BC%E5%AE%B9%E6%80%A7%E9%97%AE%E9%A2%98)
+  - [2. `mini-css-extract-plugin` 插件的基本使用](#2-mini-css-extract-plugin-%E6%8F%92%E4%BB%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8)
+  - [3. `mini-css-extract-plugin` 插件的高级用法](#3-mini-css-extract-plugin-%E6%8F%92%E4%BB%B6%E7%9A%84%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 利用插件完成 css 代码的分割
 
 ## 1. 背景

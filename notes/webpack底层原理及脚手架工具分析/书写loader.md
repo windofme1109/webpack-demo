@@ -1,10 +1,25 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [自己书写一个 loader](#%E8%87%AA%E5%B7%B1%E4%B9%A6%E5%86%99%E4%B8%80%E4%B8%AA-loader)
+  - [1. 参考资料](#1-%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99)
+  - [2. 基本的自定义 loader](#2-%E5%9F%BA%E6%9C%AC%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89-loader)
+  - [3. 基本的自定义 loader -- 使用 `options`](#3-%E5%9F%BA%E6%9C%AC%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89-loader----%E4%BD%BF%E7%94%A8-options)
+  - [4. 基本的自定义 loader -- 使用 `this.callback()`](#4-%E5%9F%BA%E6%9C%AC%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89-loader----%E4%BD%BF%E7%94%A8-thiscallback)
+  - [5. 异步的自定义 loader -- `this.async()`](#5-%E5%BC%82%E6%AD%A5%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89-loader----thisasync)
+  - [6. 加载多个自定义 loader](#6-%E5%8A%A0%E8%BD%BD%E5%A4%9A%E4%B8%AA%E8%87%AA%E5%AE%9A%E4%B9%89-loader)
+  - [7. 自定义 loader 使用场景](#7-%E8%87%AA%E5%AE%9A%E4%B9%89-loader-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 自己书写一个 loader
 
 ## 1. 参考资料
 
 1. webpack 官网上的 loader 的 api：[Loader Interface](https://v4.webpack.js.org/api/loaders/)
 
-## 1. 基本的自定义 loader
+## 2. 基本的自定义 loader
 
 1. loader 实际上就是一个函数，在打包前对源码进行处理，处理后webpack 才能对其进行打包以及后续的操作。
    > Out of the box, webpack only understands JavaScript and JSON files. Loaders allow webpack to process other types of files and convert them into valid modules that can be consumed by your application and added to the dependency graph.
@@ -57,7 +72,7 @@
    - loader **不能使用箭头函数**，因为箭头函数没有 `this` 指向，而 loader 需要 `this` 做一些事，webpack 会改变函数的 `this` 指向，调用挂载到 `this` 上的一些方法。
    - loader 接收的是入口文件的源码，输出的是处理后的源码，因此，loader 必须有返回值，且为处理后的源码。
 
-## 2. 基本的自定义 loader -- 使用 `options`
+## 3. 基本的自定义 loader -- 使用 `options`
 
 1. 我们在 `webpack.config.js` 配置 loader 时，经常配置 `options` 这项，用来控制 loader 的一些行为。
 
@@ -116,7 +131,7 @@
      ```
      使用 getOptions()，并传入 `this` 对象，返回值就是我们配置的 `options`。
      
-## 3. 基本的自定义 loader -- 使用 `this.callback()`
+## 4. 基本的自定义 loader -- 使用 `this.callback()`
 
 1. 前面我们写的 loader 都是直接对源码进行处理，返回值也只能是源码，进行不了更多的操作。如果是有一些 sourceMap 之类的内容，就无法传递到外面给 webpack 使用。因此我们需要使用 `this.callback()` 返回更多的内容。
 
@@ -145,7 +160,7 @@
       }
    ```
    
-## 4. 异步的自定义 loader -- `this.async()`
+## 5. 异步的自定义 loader -- `this.async()`
 
 1. 假设在 loader 中，有一个异步操作，如下所示：
    ```javascript
@@ -175,7 +190,7 @@
      ```
    - 这样就可以在 loader 中引入异步操作了。
    
-## 5. 加载多个自定义 loader
+## 6. 加载多个自定义 loader
 
 1. 我们新建一个 loader，是一个异步 loader，内容如下：
    ```javascript
@@ -239,7 +254,7 @@
    - `resolveLoader.extensions` 值为数组，指定文件的扩展名。
    - `resolveLoader.mainFields` 值为数组，这个字段的用法和 `resolve.mainFields` 用法一样，根据 `package.json` 文件中的 `main` 字段的文件名来查找文件。
    
-## 6. 自定义 loader 使用场景
+## 7. 自定义 loader 使用场景
 
 1. 国际化
 

@@ -1,3 +1,14 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [代码分隔 - Code Splitting](#%E4%BB%A3%E7%A0%81%E5%88%86%E9%9A%94---code-splitting)
+  - [1. 基本概念](#1-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5)
+  - [2. 配置 webpack 实现代码分割 -- 静态引入](#2-%E9%85%8D%E7%BD%AE-webpack-%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81%E5%88%86%E5%89%B2----%E9%9D%99%E6%80%81%E5%BC%95%E5%85%A5)
+  - [3. 配置 webpack 实现代码分割 -- 动态引入](#3-%E9%85%8D%E7%BD%AE-webpack-%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81%E5%88%86%E5%89%B2----%E5%8A%A8%E6%80%81%E5%BC%95%E5%85%A5)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 代码分隔 - Code Splitting
 
 ## 1. 基本概念
