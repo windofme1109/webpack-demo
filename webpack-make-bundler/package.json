@@ -1,0 +1,17 @@
+{
+  "name": "webpack-make-bundler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bundler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/parser": "^7.12.11",
+    "@babel/traverse": "^7.12.10"
+  }
+}
