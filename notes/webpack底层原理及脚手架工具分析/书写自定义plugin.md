@@ -181,7 +181,8 @@
    
 5. 这样就可以在自定义 plugin 中使用 debugger 打断点，进行调试了。
    ![](../images/plugin-debugger.png)
-   
+
+6. node 调试的官方文档：[Debugging Guide](https://nodejs.org/en/docs/guides/debugging-getting-started/)
 ## 5. 总结
 
 1. 自定义 plugin 必须是一个类或者构造函数。
