@@ -70,9 +70,20 @@
       }
    ```
 
-6. 代码解读
+6. 使用 `fs.readFileSync()` 同步读取 `filename` 指定的文件内容，并指定了文件的编码为 `utf-8`。
 
+7. 获取了 js 文件的源码后，我们需要分析出引入了哪些模块。所以我们能这里使用 `@babel/parser` 对 js 源码进行解析，将其转换为 AST （abstract syntax code）。
+   - `@babel/parser` 是用来解析 js 代码的 babel 插件。
+   - 我们使用 `parser()` 方法完成对 js 代码的解析。接收两个参数：
+     - code：必填，字符串形式的 js 源代码
+     - options：可选，配置项，我们这里的配置项是 `sourceType`，表示解析代码的模式。因为我们的源代码中使用了 ES Module 形式引入其他模块，所以 `sourceType` 设置为 `module`。还可以设置为 `script` 或者是 `unambiguous`。
+       > Indicate the mode the code should be parsed in. Can be one of "script", "module", or "unambiguous". Defaults to "script". "unambiguous" will make @babel/parser attempt to guess, based on the presence of ES6 import or export statements. Files with ES6 imports and exports are considered "module" and are otherwise "script".
+   - `@babel/parser` 详细的说明文档：[@babel/parser](https://babeljs.io/docs/en/babel-parser#docsNav)
+   
+8. 将 index.js 内的源码转换为 AST，部分内容被如下：
+   ![](../images/AST.png)
 
+9. 拿到源码的 AST，就可以获取我们想要的信息了。
 
 ## 2. 生成依赖图谱 （dependencies graph）
 
