@@ -44,7 +44,6 @@ const moduleAnalyser = (filename) => {
          // 将其写为一个函数，从传入的函数的参数中拿到 node 这个属性
          // 就是我们需要的内容
          ImportDeclaration({node}) {
-
              const dirname = path.dirname(filename);
              // 引入模块时，使用的是相对路径，相对的是当前引用这个模块的文件的路径
              // 为了避免打包过程出现问题，我们这里使用绝对路径（或者是相对于 bundler.js 的路径）
