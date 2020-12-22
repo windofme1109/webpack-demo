@@ -58,7 +58,11 @@
 
 2. 在 `options` 中，添加 `presets` 属性，将`@babel/preset-env` 这个插件添加进去。如上面所示。这样才能实现在 Webpack 中转换 ES6 语法。
 
-3. 上面的配置，使得 ES6 的语法转换为 ES5，但是对于新增的 Promise、map 等新的特性，却没有进行转换。
+3. 参考资料：
+   - [Babel7 中 @babel/preset-env 的使用](https://zhuanlan.zhihu.com/p/84799735)
+   - [最近折腾 @babel/preset-env 的一些小心得](https://blog.meathill.com/js/some-tips-of-babel-preset-env-config.html)
+   - [@babel/preset-env](https://babeljs.io/docs/en/babel-preset-env)
+4. 上面的配置，使得 ES6 的语法转换为 ES5，但是对于新增的 Promise、map 等新的特性，却没有进行转换。
 所以我们还需要使用另一个插件：`@babel/polyfill`
    - 安装：  
 `npm install --save @babel/polyfill`
@@ -105,7 +109,7 @@
 引入`@babel/polyfill`，然后就可以愉快的使用 ES6，不用担心兼容性了。
    - 注：`@babel/polyfill` 使用 ES5 的方式实现了 ES6 的新特性。保证了兼容性。
 
-4. 在 `presets` 属性中，还可以配置其他选项：
+5. 在 `presets` 属性中，还可以配置其他选项：
    ```javascript
       webpack.config.js
       presets: [['@babel/preset-env', {
@@ -129,7 +133,7 @@
    - 配置项
      - `target`  用来设置目标浏览器的版本。babel 会根据浏览器版本决定是否对 ES6 语法进行编译，如果浏览器原生支持，就不需要编译。
 
-5. 如果觉得 `options` 中的配置项过多，我们可以将配置项拿出来。新建一个 `.babelrc` 文件，以 json 格式填入 `options` 中的内容：
+6. 如果觉得 `options` 中的配置项过多，我们可以将配置项拿出来。新建一个 `.babelrc` 文件，以 json 格式填入 `options` 中的内容：
    ```javascript
       .babelrc
       {
@@ -146,9 +150,9 @@
    ```
    然后将webpack.config.js中的内容注释掉。
 
-6. 2020.12.05 新增：现在的babel 配置文件，已经更名为：babel.config.json，内容和.babelrc 一样，都是 json格式的内容。配置说明：[configuration](https://babeljs.io/docs/en/usage/#configuration)
+7. 2020.12.05 新增：现在的babel 配置文件，已经更名为：babel.config.json，内容和.babelrc 一样，都是 json格式的内容。配置说明：[configuration](https://babeljs.io/docs/en/usage/#configuration)
 
-7. 如果我们写的是业务代码，可以使用 polyfill，同时配置 `preset` 属性和 `useBuildIns` 属性，将polyfill 打包进入输出的 js 文件中。但是，如果我们写的是框架或者是第三方服务，我们就不能将 polyfill 打包到最终的 js 文件中，因为会污染全局环境，此时，就需要进行另外的配置。
+8. 如果我们写的是业务代码，可以使用 polyfill，同时配置 `preset` 属性和 `useBuildIns` 属性，将polyfill 打包进入输出的 js 文件中。但是，如果我们写的是框架或者是第三方服务，我们就不能将 polyfill 打包到最终的 js 文件中，因为会污染全局环境，此时，就需要进行另外的配置。
     - 首先在我们写的 js 代码中，不导入 `@babel/polyfill` 这个包，
 然后安装 `@babel/plugin-transform-runtime` 、`@babel/runtime`，安装命令如下：  
       - `npm install --save-dev @babel/plugin-transform-runtime`  
@@ -175,4 +179,4 @@
 `npm install --save @babel/runtime-corejs2`  
 `corejs` 为 `3`：    `npm install --save @babel/runtime-corejs3`
 
-8. 详细的参考资料：[babel-plugin-transform-runtime](https://babeljs.io/docs/en/babel-plugin-transform-runtime)
+9. 详细的参考资料：[babel-plugin-transform-runtime](https://babeljs.io/docs/en/babel-plugin-transform-runtime)
