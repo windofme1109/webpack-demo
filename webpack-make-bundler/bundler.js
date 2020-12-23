@@ -34,7 +34,6 @@ const moduleAnalyser = (filename) => {
      const ast = parser.parse(content, {
          sourceType: 'module'
      });
-     console.log(ast);
      // 存放导入的模块的路径
      const dependencies = {};
      // 遍历抽象语法树
@@ -201,7 +200,7 @@ const generatedCode = (entry) => {
     `;
 }
 
-// const code = generatedCode('./src/index.js');
-moduleAnalyser('./src/index.js');
-// console.log(code);
+const code = makeDependeciesGraph('./src/index.js');
+// moduleAnalyser('./src/index.js');
+console.log(code);
 // console.log(makeDependeciesGraph('./src/index.js'));

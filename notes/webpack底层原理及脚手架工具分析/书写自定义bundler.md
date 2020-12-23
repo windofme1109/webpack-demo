@@ -207,4 +207,35 @@
 
 ## 3. 编译为浏览器可执行的代码
 
+1. 使用 babel 提供的一些工具，完成了模块之间的依赖关系的分析以及代码的转换。现在我们需要将转换后的代码组合起来，生成一份浏览器可执行的代码。
+
+2. 经过 babel 转换后的代码如下：
+   - `index.js`
+     ```javascript
+        "use strict";
+         var _message = _interopRequireDefault(require("./message.js"));
+         function _interopRequireDefault(obj) { 
+            return obj && obj.__esModule ? obj : { "default": obj }; 
+         }
+         console.log(_message["default"]);
+     ```
+   - `message.js`
+     ```javascript
+        "use strict";
+        Object.defineProperty(exports, "__esModule", {value: true});
+        exports["default"] = void 0;
+        var _word = require("./word.js");
+        var message = "say ".concat(_word.word);
+        var _default = message;
+        exports["default"] = _default;
+     ```
+   - `word.js`
+     ```javascript
+        "use strict";
+        Object.defineProperty(exports, "__esModule", {value: true});
+        exports.word = void 0;
+        var word = 'word';
+        exports.word = word;
+     ```
+3. 我们首先对这三段代码进行分析：
 ## 4. 总结
