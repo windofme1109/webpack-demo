@@ -305,10 +305,10 @@
      ```
    - require() 函数的主要作用就是根据入口文件的绝对路径，去 `graph` 对象中寻找模块的源代码，找到源代码以后，使用 eval() 方法执行源代码。而模块的源代码又会调用 require()，所以就形成了递归调用。
    - localRequire() 详解：
-     - `index.js` 的源码中，是这样调用 require() 的：`require("./message.js")`，传入的是 `message.js` 的相对路径。但实际上，require() 接收的是绝对路径，所以我们需要将相对路径转换为绝对路径。因此在 require() 中，定义一个 localRequire()，用于路径转换。接收 localPath，作为相对路径，`graph[module].dependencies[localPath]` 这样拿到的是绝对路径，最后将将转换后的绝对路径传入 require() 函数中并返回。
+     - `index.js` 的源码中，是这样调用 require() 的：`require("./message.js")`，传入的是 `message.js` 的相对路径。但实际上，require() 接收的是绝对路径，所以我们需要将相对路径转换为绝对路径。因此在 require() 中，定义一个 localRequire()，用于路径转换。接收 localPath，作为相对路径，`graph[module].dependencies[localPath]` 这样拿到的是绝对路径，最后将转换后的绝对路径传入 require() 函数中并返回。
      - 由于是在闭包中执行，require() 指向的是形参 require，而源码中，require() 接收的是：`./message.js`，这是一个相对路径，我们知道，在 graph 对象中，我们是以模块的绝对路径为 key 的，想要拿到 `message.js` 的依赖和源码，就必须获得 `message.js` 的绝对路径，而 dependencies 字段中，恰好是相对路径为 key，绝对路径为 value，这样就根据相对路径 `./message.js`，拿到绝对路径 `src/message.js`。
      - 前面说过，模块源码中的 require() 指向的是形参 `require`，而实际上，实参是 `localRequire`，这样就将 `./message.js` 传入 localRequire() 中，从而拿到了绝对路径。因此，这是一个递归调用。
-     -递归的出口就是源码内部不再引用 require()。
+     - 递归的出口就是源码内部不再引用 require()。
    - require() 的关键在于如何执行模块的源代码。所以我们在require() 内部定义了一个立即执行匿名函数，用来执行模块的源代码。这个闭包的目的是将 js 代码封装在一个单独的作用域执行，避免污染其他作用域的变量。这个匿名函数接收三个参数：
      - `localRequire` 
      - `exports`

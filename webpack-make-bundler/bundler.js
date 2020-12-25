@@ -154,7 +154,7 @@ const generatedCode = (entry) => {
             
             // 我们看一下 index.js 转换后的源码
             // 有这样一句：require("./message.js")
-            // 由于是在闭包中执行，require() 指向的是形参 require，而源码中，require() 接收的是：./message.js
+            // 由于是在闭包中执行，require() 指向的是立即执行匿名函数的形参 require，而源码中，require() 接收的是：./message.js
             // 这是一个相对路径，我们知道，在 graph 对象中，我们是以模块的绝对路径为 key 的，想要拿到 message.js 的依赖和源码
             // 就必须获得 message.js 的绝对路径，而 dependencies 字段中，恰好是相对路径为 key，绝对路径为 value
             // 这样就根据相对路径 ./message.js，拿到绝对路径 src/message.js
@@ -177,14 +177,21 @@ const generatedCode = (entry) => {
             */
             // 定义一个全局的 exports，是因为源码中需要这个对象来存储一些东西
             // 
+            
+            
+            
             var exports = {};
             
-            // 这里在定义一个闭包
-            // 这个闭包的目的就是执行每个模块的 js 代码
+            // 这里在定义一个闭包，即为立即执行匿名函数
+            // 这个闭包的目的是将 js 代码封装在一个单独的作用域执行，避免污染其他变量
             (function(require, exports, code) {
                 eval(code);
             
             })(localRequire, exports, graph[module].code);
+            
+            
+            
+            
             
             // 由于不同的模块的源代码都需要这个 exports，即指向同一个 exports
             // 所以在 require() 函数的最后，我们需要将其返回，相当于在整个递归的过程中
@@ -199,6 +206,67 @@ const generatedCode = (entry) => {
         })(${graph});
     `;
 }
+
+
+const codeStr = {
+    './src/index.js': {
+    dependencies: { './message.js': 'src\\message.js' },
+    code: '"use strict";\n' +
+    'var _message = _interopRequireDefault(require("./message.js"));\n' +
+    'function _interopRequireDefault(obj) { ' +
+        'return obj && obj.__esModule ? ' +
+        'obj : { "default": obj }; }\n' +
+    'console.log(_message["default"]);'
+},
+    'src\\message.js': {
+    dependencies: { './word.js': 'src\\word.js' },
+    code: '"use strict";\n' +
+    'Object.defineProperty(exports, "__esModule", {\n' +
+    '  value: true\n' +
+    '});\n' +
+    'exports["default"] = void 0;\n' +
+    'var _word = require("./word.js");\n' +
+    'var message = "say ".concat(_word.word);\n' +
+    'var _default = message;\n' +
+    'exports["default"] = _default;'
+},
+    'src\\word.js': {
+    dependencies: {},
+    code: '"use strict";\n' +
+    'Object.defineProperty(exports, "__esModule", {\n' +
+    '  value: true\n' +
+    '});\n' +
+    'exports.word = void 0;\n' +
+    "var word = 'word';\n" +
+    'exports.word = word;'
+}
+}
+
+const generatedCode = (entry) => {
+    const graph = JSON.stringify(makeDependenciesGraph(entry));
+    const code = `
+              (function (graph) {
+                   
+                  function require(module) {
+   
+                      function localRequire(localPath) {
+                          return require(graph[module].dependencies[localPath]);
+                      }
+                      const export = {};
+                      (function (require, exports, code) {
+                          eval(code);
+                       })(localRequire, exports, graph[module].code);
+                       
+                       
+                       return exports;
+   
+                  }
+                  require('${entry}');
+               })(${graph})
+          `;
+    return code;
+}
+
 
 const code = makeDependeciesGraph('./src/index.js');
 // moduleAnalyser('./src/index.js');
