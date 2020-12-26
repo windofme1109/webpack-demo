@@ -314,7 +314,35 @@
      - `exports`
      - `code` 模块元代码
    - `localRequire` 这个参数就是前面定义的 localRequire() 函数
-   - `exports` 这个对象就是模块源代码中需要的 exports 对象，我们在 require() 中单独定义，并在require() 函数执行完毕后，将 exports 返回，因为不止一个模块会引用这个 exports 变量。相当于在整个递归的过程中一次又一次往 exports 里面添加东西。
+   - `exports` 这个对象就是模块源代码中需要的 exports 对象，我们在 require() 中单独定义，并在require() 函数执行完毕后，将 exports 返回。以 `word.js` 中的源码为例：
+     ```js
+        "use strict";
+        Object.defineProperty(exports, "__esModule", {value: true});
+        exports.word = void 0;
+        var word = 'word';
+        exports.word = word;
+     ```
+     - `exports` 中被添加了 `word` 字段，待 require() 中的立即执行匿名函数执行完成后，`exports` 的内容是：`{word: 'word'}`，然后被返回。此时，在 `message.js` 的源码中调用了 require(),，如下所示：
+     ```javascript
+        Object.defineProperty(exports, "__esModule", {value: true});
+        exports["default"] = void 0;
+        var _word = require("./word.js");
+        var message = "say ".concat(_word.word);
+        var _default = message;
+        exports["default"] = _default;
+     ```
+     - `_word` 接收了 require() 的返回值，则 `_word` 现在的内容是：`{word: 'word'}`。
+     - 所以，在 `message.js` 源码执行完成后，`exports` 变量的内容是：`{default: 'say word'}`，并且向 `exports` 中添加了新的属性：`__esModule`。最后将这个 `exports` 返回。
+     - 在 `index.js` 中，`require("./message.js")` 执行完成后，拿到的返回值就是上面的 `exports` 对象。
+     ```javascript
+        "use strict";
+        var _message = _interopRequireDefault(require("./message.js"));
+        function _interopRequireDefault(obj) { 
+             return obj && obj.__esModule ? obj : { "default": obj }; 
+        }
+        console.log(_message["default"]);
+     ```
+     - `_message` 最终内容是：`{default: 'say word'}`。
    - 而 `code` 参数，则是根据 `module`（绝对路径） ，从 `graph` 对象中拿出 `code`（源代码）作为参数传入匿名函数中。
    - 最后调用 eval() 方法执行模块源代码。
 
