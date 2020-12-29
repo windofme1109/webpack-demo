@@ -27,7 +27,7 @@ const babel = require('@babel/core');
 /**
  *
  * @param filename
- * @returns {{filename: *, code: *, dependencies: {}}}
+ * @returns {{filename: *, code: *, dependence: {}}}
  */
 const moduleAnalyser = (filename) => {
      const content = fs.readFileSync(filename, 'utf-8');
@@ -35,7 +35,7 @@ const moduleAnalyser = (filename) => {
          sourceType: 'module'
      });
      // 存放导入的模块的路径
-     const dependencies = {};
+     const dependence = {};
      // 遍历抽象语法树
      traverse(ast, {
          // 取出我们需要的节点
@@ -49,11 +49,11 @@ const moduleAnalyser = (filename) => {
              // console.log(dirname);
              const newFile = path.join(dirname, node.source.value) ;
              // 以相对路径作为 key，绝对路径作为 value
-             dependencies[node.source.value] = newFile;
+             dependence[node.source.value] = newFile;
          }
      })
 
-    // console.log(dependencies);
+    // console.log(dependence);
     /**
      * transformFromAstSync() 给定一个抽象语法树，将其转换为浏览器能识别的代码
      * transformFromAstSync() 第一个参数是 ast，第二个参数是源码，第三个参数是配置项
@@ -69,7 +69,7 @@ const moduleAnalyser = (filename) => {
     // console.log(code);
     return {
         filename,
-        dependencies,
+        dependence,
         code
     }
 }
@@ -78,7 +78,7 @@ const moduleAnalyser = (filename) => {
  * 分析模块之间的相互依赖关系，并将其存放到一起
  * @param entry 模块的入口
  */
-const makeDependenciesGraph = (entry) => {
+const makeDependenceGraph = (entry) => {
     const entryModule = moduleAnalyser(entry);
 
     // 存放每个模块的依赖信息
@@ -93,15 +93,15 @@ const makeDependenciesGraph = (entry) => {
         let item = graphArray[i];
 
         // 取出依赖信息
-        let {dependencies} = item;
+        let {dependence} = item;
 
-        if (dependencies) {
-            // dependencies 是一个对象，使用 for in 对其进行遍历
-            for (let key in dependencies) {
+        if (dependence) {
+            // dependence 是一个对象，使用 for in 对其进行遍历
+            for (let key in dependence) {
 
                 // 拿到依赖的模块的绝对路径，然后使用 moduleAnalyser() 分析出这个路径指定的模块的依赖关系
                 //
-                let moduleInfo = moduleAnalyser(dependencies[key]);
+                let moduleInfo = moduleAnalyser(dependence[key]);
                 // 将最新得到的依赖关系放入 graphArray 中，这样 graphArray 的长度就会加 1
                 // 那么在下次遍历的时候，依然能获取到最新的元素，从而分析其依赖关系
                 graphArray.push(moduleInfo);
@@ -114,7 +114,7 @@ const makeDependenciesGraph = (entry) => {
     graphArray.forEach(item => {
         graph[item.filename] = {
             // 只存模块的依赖信息和code
-            dependencies: item.dependencies,
+            dependence: item.dependence,
             code: item.code
         }
     });
@@ -143,7 +143,7 @@ const makeDependenciesGraph = (entry) => {
 //           function require(module) {
 //
 //             function localRequire(relativePath) {
-//               return require(graph[module].dependencies[relativePath]);
+//               return require(graph[module].dependence[relativePath]);
 //             }
 //
 //
@@ -156,7 +156,7 @@ const makeDependenciesGraph = (entry) => {
 //             // 有这样一句：require("./message.js")
 //             // 由于是在闭包中执行，require() 指向的是立即执行匿名函数的形参 require，而源码中，require() 接收的是：./message.js
 //             // 这是一个相对路径，我们知道，在 graph 对象中，我们是以模块的绝对路径为 key 的，想要拿到 message.js 的依赖和源码
-//             // 就必须获得 message.js 的绝对路径，而 dependencies 字段中，恰好是相对路径为 key，绝对路径为 value
+//             // 就必须获得 message.js 的绝对路径，而 dependence 字段中，恰好是相对路径为 key，绝对路径为 value
 //             // 这样就根据相对路径 ./message.js，拿到绝对路径 src/message.js
 //             // 前面说过，源码中的 require() 指向的是形参 require，而实际上，我们传入的实参是 localRequire，这样就将 ./message.js 传入 localRequire() 中
 //             // 从而拿到了 绝对路径
@@ -164,7 +164,7 @@ const makeDependenciesGraph = (entry) => {
 //             // 递归的出口就是 源码内部不再引用 require()
 //             /**
 //             * './src/index.js': {
-//             * dependencies: { './message.js': 'src\\\\message.js' },
+//             * dependence: { './message.js': 'src\\\\message.js' },
 //             *  code:
 //             *    "use strict";
 //             *
@@ -214,16 +214,16 @@ const makeDependenciesGraph = (entry) => {
  * @returns {string} 字符串形式的 js 代码
  */
 const generatedCode = (entry) => {
-    const graph = JSON.stringify(makeDependenciesGraph(entry));
+    const graph = JSON.stringify(makeDependenceGraph(entry));
     const code = `
               (function (graph) {
                    
                   function require(module) {
    
                       function localRequire(localPath) {
-                          return require(graph[module].dependencies[localPath]);
+                          return require(graph[module].dependence[localPath]);
                       }
-                      const export = {};
+                      const exports = {};
                       (function (require, exports, code) {
                           eval(code);
                        })(localRequire, exports, graph[module].code);
@@ -234,7 +234,7 @@ const generatedCode = (entry) => {
                   }
                   require('${entry}');
                })(${graph})
-          `;
+               `;
     return code;
 }
 
@@ -242,4 +242,6 @@ const generatedCode = (entry) => {
 
 const code = generatedCode('./src/index.js');
 console.log(code);
+
+// console.log(makedependenceGraph('./src/index.js'));
 // console.log(makeDependeciesGraph('./src/index.js'));

@@ -46,14 +46,14 @@
          const ast = parser.parse(content, {
              sourceType: 'module',
          });
-         const dependencies = {};
+         const dependence = {};
          traverse(ast, {
              ImportDeclaration({node}) {
                  const dirname = path.dirname(filename);
                  
                  const newFile = path.join(dirname, node.source.value);
    
-                 dependencies[node.source.value] = newFile;
+                 dependence[node.source.value] = newFile;
              }
          });
    
@@ -63,7 +63,7 @@
    
          return {
               filename,
-              dependencies,
+              dependence,
               code
          }
          
@@ -131,13 +131,13 @@
                                  
                 const newFile = path.join(dirname, node.source.value);
                    
-                dependencies[node.source.value] = newFile;
+                dependence[node.source.value] = newFile;
             }
         });
      ```
    - `node.source.value` 这个值，实际上是我们导入模块的一个相对路径，由于这个路径是相对于当前的 js 文件而言的，所以我们需要将相对路径转换为绝对路径：`const newFile = path.join(dirname, node.source.value);`
    - path.dirname() 这个方法接收一个路径作为参数，返回这个路径的目录名称。例如，传入的路径是： `/foo/bar/baz/asdf/quux`，返回值是：`/foo/bar/baz/asdf`。
-   - 因为可能用到相对路径，所以我们以模块的相对路径为 key，绝对路径为 value，生成一个对象：dependencies。
+   - 因为可能用到相对路径，所以我们以模块的相对路径为 key，绝对路径为 value，生成一个对象：dependence。
    
 10. 将 ES6 语法的代码生成 ES5 代码。这个是为了实现代码的一个兼容性，保证其在低版本浏览器也能运行。所以我们要使用 `@babel/core` 对代码进行转换。
     - transformFromAst() 这个方法接收一个 AST，并将其转换为 ES5 的代码。
@@ -160,9 +160,9 @@
        - [最近折腾 @babel/preset-env 的一些小心得](https://blog.meathill.com/js/some-tips-of-babel-preset-env-config.html)
        - [@babel/preset-env](https://babeljs.io/docs/en/babel-preset-env)
 
-11. 拿到编译后的代码后，将 `code`（代码）、`dependencies`（依赖）和 `filename`（入口文件）组合为一个对象，作为函数的返回值返回。
+11. 拿到编译后的代码后，将 `code`（代码）、`dependence`（依赖）和 `filename`（入口文件）组合为一个对象，作为函数的返回值返回。
 
-## 2. 生成依赖图谱 （dependencies graph）
+## 2. 生成依赖图谱 （dependence graph）
 
 1. 基本的打包流程是：从入口文件开始，分析这个文件的依赖，然后再根据依赖，去分析这个依赖文件所依赖的其他依赖，以此类推，完成整个项目的 js 、css 等依赖关系。因此我们需要从入口文件开始，分析出模块之间的依赖关系。
 
@@ -170,16 +170,16 @@
 
 3. 示例代码：
    ```javascript
-      const makeDependenciesGraph = (entry) => {
+      const makedependenceGraph = (entry) => {
            const entryModule = moduleAnalyser(entry);
            const graphArray = [entryModule];
    
            for (let i = 0; i < graphArray.length; i++) {
                let item = graphArray[i];
-               let {dependencies} = item;
-               if (dependencies) {
-                   for (let key in dependencies) {
-                       let path = dependencies[key];
+               let {dependence} = item;
+               if (dependence) {
+                   for (let key in dependence) {
+                       let path = dependence[key];
                        graphArray.push(moduleAnalyser(path));
                    }
                }
@@ -189,7 +189,7 @@
            graphArray.forEach(item => {
                graph[item.filename] = {
                    code: item.code,
-                   dependencies: item.dependencies
+                   dependence: item.dependence
                }
            });
    
@@ -198,11 +198,11 @@
    ```
 4. 分析入口文件，得到分析结果：`entryModule`，将分析结果放入一个数组中：`graphArray`。
 
-5. 遍历 `graphArray`，从数组项 `item` 中取出 `dependencies`，`dependencies` 是一个对象，存放的是某个模块的绝对路径。对象的 key 是相对路径，value 是绝对路径。所以我们使用 for...in 循环，遍历 `dependencies` 对象，拿到模块的绝对路径，然后使用 moduleAnalyser() 方法，分析这个模块。将分析结果放到 `graphArray` 中。
+5. 遍历 `graphArray`，从数组项 `item` 中取出 `dependence`，`dependence` 是一个对象，存放的是某个模块的绝对路径。对象的 key 是相对路径，value 是绝对路径。所以我们使用 for...in 循环，遍历 `dependence` 对象，拿到模块的绝对路径，然后使用 moduleAnalyser() 方法，分析这个模块。将分析结果放到 `graphArray` 中。
 
 6. 传统的 for 循环遍历数组，不要求数组的长度和内容是固定的，也就是每次循环结束，数组内容如果有变化，包括长度变化，那么下次循环时以当前的最新的数组为主。因此间接实现了递归的功能。
 
-7. 对最终的存放模块分析结果的数组进行改造，将其转换为一个对象，以 `filename` 为 key，`code` 和 `dependencies` 包装为对象，将其作为 `filename` 的 value。
+7. 对最终的存放模块分析结果的数组进行改造，将其转换为一个对象，以 `filename` 为 key，`code` 和 `dependence` 包装为对象，将其作为 `filename` 的 value。
 
 
 ## 3. 编译为浏览器可执行的代码
@@ -246,14 +246,14 @@
 4. 生成源码
    ```javascript
       const generatedCode = (entry) => {
-          const graph = JSON.stringify(makeDependenciesGraph(entry));
+          const graph = JSON.stringify(makedependenceGraph(entry));
           const code = `
               (function (graph) {
                    
                   function require(module) {
    
                       function localRequire(localPath) {
-                          return require(graph[module].dependencies[localPath]);
+                          return require(graph[module].dependence[localPath]);
                       }
                       const export = {};
                       (function (require, exports, code) {
@@ -270,7 +270,7 @@
           return code; 
       }
    ```
-5. 利用 makeDependenciesGraph() 生成依赖图谱：`graph`。因为要生成可执行的源码，而 `graph` 是作为参数传入的，因此要使用 JSON.stringify() 方法将 `graph` 对象转换为字符串。
+5. 利用 makedependenceGraph() 生成依赖图谱：`graph`。因为要生成可执行的源码，而 `graph` 是作为参数传入的，因此要使用 JSON.stringify() 方法将 `graph` 对象转换为字符串。
 
 6. `code` 存放的是源码信息。首先定义一个立即执行匿名函数，作用是避免污染浏览器的作用域。函数接收 `graph` 作为参数，因此我们需要将前面生成的 `graph` 对象传入。
    ```javascript
@@ -293,7 +293,7 @@
         require(module) {
      
             function localRequire(localPath) {
-                return require(graph[module].dependencies[localPath]);
+                return require(graph[module].dependence[localPath]);
             }
      
             var exports = {};
@@ -305,8 +305,8 @@
      ```
    - require() 函数的主要作用就是根据入口文件的绝对路径，去 `graph` 对象中寻找模块的源代码，找到源代码以后，使用 eval() 方法执行源代码。而模块的源代码又会调用 require()，所以就形成了递归调用。
    - localRequire() 详解：
-     - `index.js` 的源码中，是这样调用 require() 的：`require("./message.js")`，传入的是 `message.js` 的相对路径。但实际上，require() 接收的是绝对路径，所以我们需要将相对路径转换为绝对路径。因此在 require() 中，定义一个 localRequire()，用于路径转换。接收 localPath，作为相对路径，`graph[module].dependencies[localPath]` 这样拿到的是绝对路径，最后将转换后的绝对路径传入 require() 函数中并返回。
-     - 由于是在闭包中执行，require() 指向的是形参 require，而源码中，require() 接收的是：`./message.js`，这是一个相对路径，我们知道，在 graph 对象中，我们是以模块的绝对路径为 key 的，想要拿到 `message.js` 的依赖和源码，就必须获得 `message.js` 的绝对路径，而 dependencies 字段中，恰好是相对路径为 key，绝对路径为 value，这样就根据相对路径 `./message.js`，拿到绝对路径 `src/message.js`。
+     - `index.js` 的源码中，是这样调用 require() 的：`require("./message.js")`，传入的是 `message.js` 的相对路径。但实际上，require() 接收的是绝对路径，所以我们需要将相对路径转换为绝对路径。因此在 require() 中，定义一个 localRequire()，用于路径转换。接收 localPath，作为相对路径，`graph[module].dependence[localPath]` 这样拿到的是绝对路径，最后将转换后的绝对路径传入 require() 函数中并返回。
+     - 由于是在闭包中执行，require() 指向的是形参 require，而源码中，require() 接收的是：`./message.js`，这是一个相对路径，我们知道，在 graph 对象中，我们是以模块的绝对路径为 key 的，想要拿到 `message.js` 的依赖和源码，就必须获得 `message.js` 的绝对路径，而 dependence 字段中，恰好是相对路径为 key，绝对路径为 value，这样就根据相对路径 `./message.js`，拿到绝对路径 `src/message.js`。
      - 前面说过，模块源码中的 require() 指向的是形参 `require`，而实际上，实参是 `localRequire`，这样就将 `./message.js` 传入 localRequire() 中，从而拿到了绝对路径。因此，这是一个递归调用。
      - 递归的出口就是源码内部不再引用 require()。
    - require() 的关键在于如何执行模块的源代码。所以我们在require() 内部定义了一个立即执行匿名函数，用来执行模块的源代码。这个闭包的目的是将 js 代码封装在一个单独的作用域执行，避免污染其他作用域的变量。这个匿名函数接收三个参数：
