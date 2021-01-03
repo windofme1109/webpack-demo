@@ -361,4 +361,4 @@
    - 在使用递归的过程，必须存在返回值，同时注意递归的终止条件。
    
 4. 递归执行 require() 如下图所示：
-   [](../images/generateCode.png)
+   ![](../images/generateCode.png)
